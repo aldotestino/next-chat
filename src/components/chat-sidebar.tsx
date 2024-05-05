@@ -25,7 +25,7 @@ async function ChatSidebar() {
       </div>
       <div className="h-full overflow-y-auto divide-y">
         {Array.from({ length: 20 }).map((_, index) => (
-          <Link key={index} href={`/chat/g/${index}`} className="block p-4 hover:bg-muted">Chat{index}</Link>
+          <Link key={index} href={`/chat/p/${index}`} className="block p-4 hover:bg-muted">Chat{index}</Link>
         ))}
       </div>
     </aside>
