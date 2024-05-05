@@ -19,7 +19,7 @@ async function ChatSidebar() {
               avatarBox:'h-10 w-10'
             }
           }}/>
-          <p className='text-muted-foreground text-lg font-semibold'>{userHandle}</p>
+          {/* <p className='text-muted-foreground text-lg font-semibold'>{userHandle}</p> */}
         </div>
         <Separator />
       </div>

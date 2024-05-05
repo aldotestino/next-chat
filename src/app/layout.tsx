@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <ClerkProvider appearance={{ baseTheme: dark }}>
       <html lang="en">
-        <body className={cn('h-screen font-sans antialiasedn dark', fontSans.variable)}>{children}</body>
+        <body className={cn('h-screen font-sans antialiased dark', fontSans.variable)}>{children}</body>
       </html>
     </ClerkProvider>
   );
