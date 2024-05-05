@@ -7,11 +7,11 @@ function AuthLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="w-full max-w-screen-md mx-auto p-4 space-y-16">
+    <div className="w-full max-w-screen-md mx-auto space-y-16 px-4 md:px-0">
       <AuthNavbar />
-      <div className="flex justify-center">
+      <main className="flex justify-center">
         {children}
-      </div>
+      </main>
     </div>
   );
 }

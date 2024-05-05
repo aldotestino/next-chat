@@ -2,7 +2,7 @@ import { SignIn } from '@clerk/nextjs';
 
 function SignInPage() {
   return (
-    <SignIn routing="hash" />
+    <SignIn routing="hash" forceRedirectUrl="/chat" />
   );
 }
 
