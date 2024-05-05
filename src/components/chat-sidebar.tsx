@@ -1,10 +1,9 @@
 import React from 'react';
 import { Separator } from './ui/separator';
 import { UserButton } from '@clerk/nextjs';
-import Link from 'next/link';
-import { Input } from './ui/input';
-import ChatPreview from './chat-preview';
 import Chats from './chats';
+import { Button } from './ui/button';
+import { SquarePen } from 'lucide-react';
 // import { currentUser } from '@clerk/nextjs/server';
 
 const chats = [{
@@ -61,20 +60,18 @@ const chats = [{
 
 async function ChatSidebar() {
 
-  // const user = await currentUser();
-
-  // const userHandle = user?.username || `${user?.firstName} ${user?.lastName}` || user?.emailAddresses[0].emailAddress || '';
-
   return (
-    <aside className="w-80 border-r shadow-md grid grid-rows-[auto,auto,1fr] overflow-y-hidden">
+    <aside className="w-80 border-r shadow-md grid grid-rows-[auto,1fr] overflow-y-hidden">
       <div>
-        <div className="p-4 flex items-center gap-2">
+        <div className="p-4 flex items-center justify-between gap-2">
           <UserButton appearance={{
             elements:{
               avatarBox:'h-10 w-10'
             }
           }}/>
-          {/* <p className='text-muted-foreground text-lg font-semibold'>{userHandle}</p> */}
+          <Button variant="secondary" size="icon">
+            <SquarePen className="w-4 h-4" />
+          </Button>
         </div>
         <Separator />
       </div>

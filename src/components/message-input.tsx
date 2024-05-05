@@ -42,8 +42,9 @@ function MessageInput({ chatType, chatId }: {chatType: string, chatId: string}) 
             </FormItem>
           )}
         />
-        <Button type="submit">
-          <Send />
+        <Button type="submit" className="space-x-2">
+          <span>Send</span>
+          <Send className="w-6 h-6" />
         </Button>
       </form>
     </Form>
