@@ -9,7 +9,7 @@ export default function Home() {
         <h1 className="text-6xl font-bold text-transparent bg-gradient-to-b from-slate-50 to-slate-600 bg-clip-text">Next Chat</h1>
         <div className="space-y-4">
           <p className='max-w-prose text-lg'>Experience the future of communication with Next Chat. Effortless conversations, innovative features, and seamless connections await. Join us and embrace the next evolution of chatting.</p>
-          <div className="flex gap-2 items-center justify-center">
+          <div className="flex gap-4 items-center justify-center">
             <Link href="/auth/signin" className={buttonVariants({ size: 'lg' })}>Sign In</Link>
             <Link href="/auth/signup" className={buttonVariants({ variant: 'secondary', size: 'lg' })}>Sign Up</Link>
           </div>
