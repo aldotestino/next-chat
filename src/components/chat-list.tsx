@@ -1,11 +1,11 @@
 'use client';
 import { useMemo, useState } from 'react';
-import ChatPreview from './chat-preview';
+import ChatPreview, { ChatPreviewFallback } from './chat-preview';
 import { Input } from './ui/input';
 import { useParams } from 'next/navigation';
 import { Search } from 'lucide-react';
 
-function Chats({ chats }: {chats: {id: string, type: string, name: string, image?: string, lastMessage: string}[]}) {
+function ChatList({ chats }: {chats: {id: string, type: string, name: string, image?: string, lastMessage: string}[]}) {
 
   const params = useParams<{ type: string; id: string }>();
   const [search, setSearch] = useState('');
@@ -29,4 +29,14 @@ function Chats({ chats }: {chats: {id: string, type: string, name: string, image
   );
 }
 
-export default Chats;
+export function ChatListFallback() {
+  return (
+    <div className="h-full overflow-auto divide-y">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <ChatPreviewFallback key={i} />
+      ))}
+    </div>
+  );
+}
+
+export default ChatList;

@@ -1,5 +1,5 @@
-import ChatSidebar from '@/components/chat-sidebar';
-import React from 'react';
+import ChatSidebar, { ChatSidebarFallback } from '@/components/chat-sidebar';
+import React, { Suspense } from 'react';
 
 function ChatLayout({
   children
@@ -9,7 +9,9 @@ function ChatLayout({
 
   return (
     <div className="w-full h-full grid grid-cols-[auto,1fr]">
-      <ChatSidebar />
+      <Suspense fallback={<ChatSidebarFallback />}>
+        <ChatSidebar />
+      </Suspense>
       {children}
     </div>
   );
