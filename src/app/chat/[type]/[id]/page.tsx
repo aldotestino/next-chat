@@ -7,7 +7,7 @@ function ChatPage({ params }: { params: { type: string, id: number } }) {
     <main className="grid grid-rows-[auto,1fr,auto]">
       <ChatNavbar />
       <Chat />
-      <MessageInput />
+      <MessageInput chatType={params.type} chatId={params.id} />
     </main>
   );
 }
