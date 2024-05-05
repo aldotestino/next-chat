@@ -15,7 +15,7 @@ const messageSchema = z.object({
 
 type MessageSchema = z.infer<typeof messageSchema>;
 
-function MessageInput({ chatType, chatId }: {chatType: string, chatId: number}) {
+function MessageInput({ chatType, chatId }: {chatType: string, chatId: string}) {
 
   const form = useForm<MessageSchema>({
     resolver: zodResolver(messageSchema),
@@ -30,7 +30,7 @@ function MessageInput({ chatType, chatId }: {chatType: string, chatId: number}) 
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex gap-2 p-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full flex gap-4 p-4">
         <FormField
           control={form.control}
           name="content"

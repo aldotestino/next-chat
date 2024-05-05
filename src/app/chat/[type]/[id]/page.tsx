@@ -2,7 +2,7 @@ import Chat from '@/components/chat';
 import ChatNavbar from '@/components/chat-navbar';
 import MessageInput from '@/components/message-input';
 
-function ChatPage({ params }: { params: { type: string, id: number } }) {
+function ChatPage({ params }: { params: { type: string, id: string } }) {
 
   const name = 'John Doe';
   const image = 'https://github.com/shadcn.png';
