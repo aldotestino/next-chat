@@ -4,14 +4,16 @@ import ChatPreview, { ChatPreviewFallback } from './chat-preview';
 import { Input } from './ui/input';
 import { useParams } from 'next/navigation';
 import { Search } from 'lucide-react';
+import { ChatPreviewT } from '@/lib/types';
+import { getHandle } from '@/lib/utils';
 
-function ChatList({ chats }: {chats: {id: string, type: string, name: string, image?: string, lastMessage: string}[]}) {
+function ChatList({ chats }: {chats: ChatPreviewT[]}) {
 
   const params = useParams<{ type: string; id: string }>();
   const [searchTerm, setsearchTerm] = useState('');
 
   const filteredChats = useMemo(() => {
-    return chats.filter(c => c.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    return chats.filter(c => getHandle(c.user).toLowerCase().includes(searchTerm.toLowerCase()));
   }, [chats, searchTerm]);
 
   return (
@@ -22,7 +24,7 @@ function ChatList({ chats }: {chats: {id: string, type: string, name: string, im
       </div>
       <div className="h-full overflow-y-auto divide-y">
         {filteredChats.map(c => (
-          <ChatPreview key={`${c.type}${c.id}`} chat={c} selected={params.type === c.type && params.id === c.id} />
+          <ChatPreview key={c.id} chat={c} selected={parseInt(params.id) === c.id} />
         ))}
       </div>
     </div>

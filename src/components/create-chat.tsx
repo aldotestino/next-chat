@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from './ui/dialog';
 import Spinner from './ui/spinner';
 import { createPersonalChat } from '@/server/actions';
+import { getHandle } from '@/lib/utils';
 
 function CreateChat() {
 
@@ -60,10 +61,10 @@ function CreateChat() {
           {foundUsers.map(user => (
             <div key={user.id} onClick={() => handleCreateChat(user.id)} className="flex items-center gap-4 p-4 cursor-pointer hover:bg-muted">
               <Avatar className="w-10 h-10">
-                <AvatarImage src={user.image || undefined} alt={user.email[0]} />
-                <AvatarFallback>{user.email[0]}</AvatarFallback>
+                <AvatarImage src={user.image || undefined} alt={getHandle(user)} />
+                <AvatarFallback>{getHandle(user)[0]}</AvatarFallback>
               </Avatar>
-              <p>{user.email}</p>
+              <p>{getHandle(user)}</p>
             </div>
           ))}
         </div>

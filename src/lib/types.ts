@@ -6,3 +6,12 @@ export type User = {
   firstName: string | null;
   lastName: string | null;
 }
+
+export type ChatPreviewT = {
+  id: number;
+  user: User;
+  lastMessage: {
+    content: string;
+    createdAt: Date;
+  } | null;
+}
