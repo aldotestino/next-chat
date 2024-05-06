@@ -1,5 +1,5 @@
 {
-  "id": "05af49ba-ac51-4aa6-94e5-09c0badb4ccc",
+  "id": "caf15289-da8f-471d-8042-a87e3b7daf5f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "5",
   "dialect": "pg",
@@ -12,6 +12,18 @@
           "name": "id",
           "type": "serial",
           "primaryKey": true,
+          "notNull": true
+        },
+        "user_id_1": {
+          "name": "user_id_1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id_2": {
+          "name": "user_id_2",
+          "type": "text",
+          "primaryKey": false,
           "notNull": true
         },
         "created_at": {
@@ -68,48 +80,6 @@
         "message_chat_id_chat_id_fk": {
           "name": "message_chat_id_chat_id_fk",
           "tableFrom": "message",
-          "tableTo": "chat",
-          "columnsFrom": [
-            "chat_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
-    },
-    "personal_chat": {
-      "name": "personal_chat",
-      "schema": "",
-      "columns": {
-        "chat_id": {
-          "name": "chat_id",
-          "type": "integer",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "user1": {
-          "name": "user1",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "user2": {
-          "name": "user2",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "personal_chat_chat_id_chat_id_fk": {
-          "name": "personal_chat_chat_id_chat_id_fk",
-          "tableFrom": "personal_chat",
           "tableTo": "chat",
           "columnsFrom": [
             "chat_id"

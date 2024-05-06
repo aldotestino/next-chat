@@ -1,7 +1,6 @@
 import { pgTable, serial, text, integer, timestamp } from 'drizzle-orm/pg-core';
 import chat from './chat';
 import { relations } from 'drizzle-orm';
-import { m } from 'framer-motion';
 
 const message = pgTable('message', {
   id: serial('id').primaryKey(),
