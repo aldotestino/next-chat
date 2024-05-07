@@ -103,6 +103,51 @@ export const createPersonalChat = authAction(createPersonalChatSchema, async ({ 
   redirect(`/chat/p/${newChat[0].id}`);
 });
 
+const getChatSchema = z.object({
+  chatId: z.number(),
+});
+
+export const getChat = authAction(getChatSchema, async ({ chatId }, { user }) => {
+
+  const personalChat = await db.query.chat.findFirst({
+    where: and(eq(chat.id, chatId), or(eq(chat.userId1, user.id), eq(chat.userId2, user.id))),
+    with: {
+      messages: {
+        orderBy: desc(message.createdAt),
+        columns: {
+          content: true,
+          createdAt: true,
+          userId: true,
+        }
+      }
+    }
+  });
+
+  if (!personalChat) {
+    redirect('/chat');
+  }
+
+  const otherUserId = personalChat.userId1 === user.id ? personalChat.userId2 : personalChat.userId1;
+  const otherUser = await clerkClient.users.getUser(otherUserId);
+
+  return {
+    id: personalChat.id,
+    user: {
+      id: otherUserId,
+      username: otherUser.username,
+      email: otherUser.emailAddresses[0].emailAddress,
+      image: otherUser.imageUrl,
+      firstName: otherUser.firstName,
+      lastName: otherUser.lastName,
+    },
+    messages: personalChat.messages.map((m) => ({
+      content: m.content,
+      createdAt: m.createdAt,
+      isMine: m.userId === user.id,
+    })),
+  };
+});
+
 const sendMessageSchema = z.object({
   chatId: z.number(),
   content: z.string().min(1),

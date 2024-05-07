@@ -1,15 +1,15 @@
 import Chat from '@/components/chat';
 import ChatNavbar from '@/components/chat-navbar';
 import MessageInput from '@/components/message-input';
+import { getChat } from '@/server/actions';
 
-function ChatPage({ params }: { params: { type: string, id: string } }) {
+async function ChatPage({ params }: { params: { type: string, id: string } }) {
 
-  const name = 'John Doe';
-  const image = 'https://github.com/shadcn.png';
+  const result = await getChat({ chatId: parseInt(params.id) });
 
   return (
     <main className="grid grid-rows-[auto,1fr,auto]">
-      <ChatNavbar name={name} image={image} />
+      <ChatNavbar user={result.data!.user} />
       <Chat />
       <MessageInput chatType={params.type} chatId={params.id} />
     </main>

@@ -6,4 +6,10 @@ function Chat() {
   );
 }
 
+export function ChatFallback() {
+  return (
+    <div>ChatFallback</div>
+  );
+}
+
 export default Chat;
