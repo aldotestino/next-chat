@@ -10,8 +10,18 @@ export type User = {
 export type ChatPreviewT = {
   id: number;
   user: User;
-  lastMessage: {
-    content: string;
-    createdAt: Date;
-  } | null;
+  lastMessage: Pick<MessageT, 'content' | 'createdAt'> | null;
+}
+
+export type MessageT = {
+  id: number;
+  isMine: boolean;
+  content: string;
+  createdAt: Date;
+}
+
+export type ChatT = {
+  id: number;
+  user: User;
+  messages: MessageT[];
 }

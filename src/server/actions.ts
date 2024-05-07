@@ -6,7 +6,7 @@ import { chat, message } from '@/db/schema';
 import { authAction } from '@/lib/safe-actions';
 import { getUserHandle } from '@/lib/utils';
 import { clerkClient } from '@clerk/nextjs/server';
-import { desc, eq, or, and } from 'drizzle-orm';
+import { desc, eq, or, and, asc } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -55,12 +55,12 @@ export const getChats = authAction(z.object({}), async (_, { user }) => {
         columns: {
           content: true,
           createdAt: true,
-        },
+        }
       }
     }
   });
 
-  const chats = Promise.all(
+  const chats = await Promise.all(
     rawChats.map(async (chat) => {
       const otherUserId = chat.userId1 === user.id ? chat.userId2 : chat.userId1;
       const otherUser = await clerkClient.users.getUser(otherUserId);
@@ -78,6 +78,17 @@ export const getChats = authAction(z.object({}), async (_, { user }) => {
         lastMessage: chat.messages.length > 0 ? chat.messages[0] : null,
       };
     }));
+
+  // Sort by last message date
+  chats.sort((a, b) => {
+    if (!a.lastMessage) {
+      return 1;
+    }
+    if (!b.lastMessage) {
+      return -1;
+    }
+    return b.lastMessage.createdAt.getTime() - a.lastMessage.createdAt.getTime();
+  });
 
   return chats;
 });
@@ -113,8 +124,9 @@ export const getChat = authAction(getChatSchema, async ({ chatId }, { user }) =>
     where: and(eq(chat.id, chatId), or(eq(chat.userId1, user.id), eq(chat.userId2, user.id))),
     with: {
       messages: {
-        orderBy: desc(message.createdAt),
+        orderBy: asc(message.createdAt),
         columns: {
+          id: true,
           content: true,
           createdAt: true,
           userId: true,
@@ -141,6 +153,7 @@ export const getChat = authAction(getChatSchema, async ({ chatId }, { user }) =>
       lastName: otherUser.lastName,
     },
     messages: personalChat.messages.map((m) => ({
+      id: m.id,
       content: m.content,
       createdAt: m.createdAt,
       isMine: m.userId === user.id,

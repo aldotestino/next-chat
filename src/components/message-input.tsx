@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Send } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { sendMessage } from '@/server/actions';
+import Spinner from './ui/spinner';
 
 const messageSchema = z.object({
   content: z.string().min(1)
@@ -18,13 +19,17 @@ type MessageSchema = z.infer<typeof messageSchema>;
 
 function MessageInput({ chatType, chatId }: {chatType: string, chatId: string}) {
 
-  const { execute, status } = useAction(sendMessage);
-
   const form = useForm<MessageSchema>({
     resolver: zodResolver(messageSchema),
     defaultValues: {
       content: '',
     },
+  });
+
+  const { execute, status } = useAction(sendMessage, {
+    onSuccess: () => {
+      form.reset();
+    }
   });
  
   function onSubmit(values: MessageSchema) {
@@ -45,9 +50,9 @@ function MessageInput({ chatType, chatId }: {chatType: string, chatId: string}) 
             </FormItem>
           )}
         />
-        <Button type="submit" className="space-x-2">
+        <Button type="submit" className="space-x-2" disabled={status === 'executing'}>
           <span>Send</span>
-          <Send className="w-6 h-6" />
+          {status === 'executing' ? <Spinner className="w-6 h-6" /> :<Send className="w-6 h-6" />}
         </Button>
       </form>
     </Form>

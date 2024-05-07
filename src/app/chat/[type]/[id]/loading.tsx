@@ -4,7 +4,7 @@ import MessageInput from '@/components/message-input';
 
 function ChatPageFallback() {
   return (
-    <main className="grid grid-rows-[auto,1fr,auto]">
+    <main className="grid grid-rows-[auto,1fr,auto] overflow-hidden">
       <ChatNavbarFallback />
       <ChatFallback />
       <MessageInput chatType="p" chatId="1" />
