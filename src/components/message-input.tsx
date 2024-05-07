@@ -1,13 +1,14 @@
 'use client';
 
 import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import { useAction } from 'next-safe-action/hooks';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Send } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { sendMessage } from '@/server/actions';
 
 const messageSchema = z.object({
   content: z.string().min(1)
@@ -17,6 +18,8 @@ type MessageSchema = z.infer<typeof messageSchema>;
 
 function MessageInput({ chatType, chatId }: {chatType: string, chatId: string}) {
 
+  const { execute, status } = useAction(sendMessage);
+
   const form = useForm<MessageSchema>({
     resolver: zodResolver(messageSchema),
     defaultValues: {
@@ -25,7 +28,7 @@ function MessageInput({ chatType, chatId }: {chatType: string, chatId: string}) 
   });
  
   function onSubmit(values: MessageSchema) {
-    console.log(values);
+    execute({ chatId: parseInt(chatId), content: values.content });
   }
 
   return (

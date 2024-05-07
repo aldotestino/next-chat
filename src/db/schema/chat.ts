@@ -11,7 +11,7 @@ const chat = pgTable('chat', {
   unique: unique().on(t.userId1, t.userId2)
 }));
 
-export const chatRelations = relations(chat, ({ one, many }) => ({
+export const chatRelations = relations(chat, ({ many }) => ({
   messages: many(message)
 }));
 

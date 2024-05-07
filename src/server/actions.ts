@@ -5,8 +5,8 @@ import * as z from 'zod';
 import { chat, message } from '@/db/schema';
 import { authAction } from '@/lib/safe-actions';
 import { getUserHandle } from '@/lib/utils';
-import { clerkClient, currentUser } from '@clerk/nextjs/server';
-import { desc, eq, or } from 'drizzle-orm';
+import { clerkClient } from '@clerk/nextjs/server';
+import { desc, eq, or, and } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
@@ -101,4 +101,28 @@ export const createPersonalChat = authAction(createPersonalChatSchema, async ({ 
 
   revalidatePath('/chat');
   redirect(`/chat/p/${newChat[0].id}`);
+});
+
+const sendMessageSchema = z.object({
+  chatId: z.number(),
+  content: z.string().min(1),
+});
+
+export const sendMessage = authAction(sendMessageSchema, async ({ chatId, content }, { user }) => {
+
+  const personalChat = await db.query.chat.findFirst({
+    where: and(eq(chat.id, chatId), or(eq(chat.userId1, user.id), eq(chat.userId2, user.id)))
+  });
+
+  if (!personalChat) {
+    throw new Error('Chat not found');
+  }
+
+  await db.insert(message).values({
+    chatId: personalChat.id,
+    userId: user.id,
+    content,
+  });
+
+  revalidatePath(`/chat/p/${chat.id}`);
 });
