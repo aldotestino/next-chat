@@ -1,20 +1,17 @@
 import Link from 'next/link';
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { cn, getHandle } from '@/lib/utils';
+import { cn, getUserHandle } from '@/lib/utils';
 import { Skeleton } from './ui/skeleton';
 import { ChatPreviewT } from '@/lib/types';
+import UserAvatar from './user-avatar';
 
 function ChatPreview({ chat, selected }: {chat: ChatPreviewT, selected: boolean}) {
   
   return (
     <Link href={`/chat/p/${chat.id}`} className={cn('block p-4 hover:bg-muted', selected && 'bg-primary hover:bg-primary')}>
       <div className="flex items-center gap-4">
-        <Avatar className="w-10 h-10">
-          <AvatarImage src={chat.user.image || undefined} alt={getHandle(chat.user)} />
-          <AvatarFallback>{getHandle(chat.user)[0]}</AvatarFallback>
-        </Avatar>
+        <UserAvatar imageUrl={chat.user.image || undefined} userHandle={getUserHandle(chat.user)} />
         <div>
-          <p className="text-lg font-semibold text-ellipsis">{getHandle(chat.user)}</p>
+          <p className="text-lg font-semibold text-ellipsis">{getUserHandle(chat.user)}</p>
           {chat.lastMessage && <p className={cn('text-muted-foreground truncate', selected && 'text-primary-foreground')}>{chat.lastMessage.content}</p>}
         </div>
       </div>

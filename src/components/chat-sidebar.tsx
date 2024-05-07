@@ -5,14 +5,12 @@ import ChatList, { ChatListFallback } from './chat-list';
 import { Button } from './ui/button';
 import { SquarePen } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
-import { getChats } from '@/server/query';
+import { getChats } from '@/server/actions';
 import CreateChat from './create-chat';
 
 async function ChatSidebar() {
 
-  const chats = await getChats();
-
-  console.log(chats);
+  const result = await getChats({});
   
   return (
     <aside className="w-80 border-r shadow-md grid grid-rows-[auto,1fr] overflow-y-hidden">
@@ -27,7 +25,7 @@ async function ChatSidebar() {
         </div>
         <Separator />
       </div>
-      <ChatList chats={chats} />
+      <ChatList chats={result.data || []} />
     </aside>
   );
 }

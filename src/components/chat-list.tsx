@@ -1,11 +1,11 @@
 'use client';
 import { useMemo, useState } from 'react';
-import ChatPreview, { ChatPreviewFallback } from './chat-preview';
+import ChatPreviewT, { ChatPreviewFallback } from './chat-preview';
 import { Input } from './ui/input';
 import { useParams } from 'next/navigation';
 import { Search } from 'lucide-react';
 import { ChatPreviewT } from '@/lib/types';
-import { getHandle } from '@/lib/utils';
+import { getUserHandle } from '@/lib/utils';
 
 function ChatList({ chats }: {chats: ChatPreviewT[]}) {
 
@@ -13,7 +13,7 @@ function ChatList({ chats }: {chats: ChatPreviewT[]}) {
   const [searchTerm, setsearchTerm] = useState('');
 
   const filteredChats = useMemo(() => {
-    return chats.filter(c => getHandle(c.user).toLowerCase().includes(searchTerm.toLowerCase()));
+    return chats.filter(c => getUserHandle(c.user).toLowerCase().includes(searchTerm.toLowerCase()));
   }, [chats, searchTerm]);
 
   return (
