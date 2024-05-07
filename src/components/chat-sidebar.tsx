@@ -6,7 +6,7 @@ import { Button } from './ui/button';
 import { SquarePen } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
 import { getChats } from '@/server/actions';
-import CreateChat from './create-chat';
+import CreateChatDialog from './create-chat-dialog';
 
 async function ChatSidebar() {
 
@@ -21,7 +21,7 @@ async function ChatSidebar() {
               avatarBox:'h-10 w-10'
             }
           }}/>
-          <CreateChat />
+          <CreateChatDialog />
         </div>
         <Separator />
       </div>

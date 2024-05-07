@@ -1,6 +1,6 @@
 'use client';
 import { useMemo, useState } from 'react';
-import ChatPreviewT, { ChatPreviewFallback } from './chat-preview';
+import ChatPreview, { ChatPreviewFallback } from './chat-preview';
 import { Input } from './ui/input';
 import { useParams } from 'next/navigation';
 import { Search } from 'lucide-react';

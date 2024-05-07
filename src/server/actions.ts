@@ -18,6 +18,17 @@ export const searchForUser = authAction(searchForUserSchema, async ({ searchTerm
 
   const users = await clerkClient.users.getUserList();
 
+  const rawChats = await db.query.chat.findMany({
+    where: or(eq(chat.userId1, user.id), eq(chat.userId2, user.id)),
+    columns: {
+      userId1: true,
+      userId2: true,
+    }
+  });
+
+  const chats = rawChats.map((c) => c.userId1 === user.id ? c.userId2 : c.userId1);
+
+  // Filter out the current user and users that are already in chats
   const cleanUsers = users.data.map((user) => ({
     id: user.id,
     username: user.username,
@@ -25,7 +36,7 @@ export const searchForUser = authAction(searchForUserSchema, async ({ searchTerm
     image: user.imageUrl,
     firstName: user.firstName,
     lastName: user.lastName,
-  })).filter((u) => u.id !== user?.id);
+  })).filter((u) => u.id !== user.id && !chats.includes(u.id));
 
   return cleanUsers.filter((user) => {
     const username = getUserHandle(user);
@@ -36,7 +47,7 @@ export const searchForUser = authAction(searchForUserSchema, async ({ searchTerm
 export const getChats = authAction(z.object({}), async (_, { user }) => {
 
   const rawChats = await db.query.chat.findMany({
-    where: or(eq(chat.userId1, user!.id), eq(chat.userId2, user!.id)),
+    where: or(eq(chat.userId1, user!.id), eq(chat.userId2, user.id)),
     with: {
       messages: {
         orderBy: desc(message.createdAt),
@@ -51,7 +62,7 @@ export const getChats = authAction(z.object({}), async (_, { user }) => {
 
   const chats = Promise.all(
     rawChats.map(async (chat) => {
-      const otherUserId = chat.userId1 === user!.id ? chat.userId2 : chat.userId1;
+      const otherUserId = chat.userId1 === user.id ? chat.userId2 : chat.userId1;
       const otherUser = await clerkClient.users.getUser(otherUserId);
 
       return {
@@ -84,7 +95,7 @@ export const createPersonalChat = authAction(createPersonalChatSchema, async ({ 
   }
 
   const newChat = await db.insert(chat).values({
-    userId1: user!.id,
+    userId1: user.id,
     userId2: user2.id,
   }).returning();
 
