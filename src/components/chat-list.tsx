@@ -1,4 +1,5 @@
 'use client';
+
 import { useMemo, useState } from 'react';
 import ChatPreview, { ChatPreviewFallback } from './chat-preview';
 import { Input } from './ui/input';
@@ -7,7 +8,7 @@ import { Search } from 'lucide-react';
 import { ChatPreviewT } from '@/lib/types';
 import { getUserHandle } from '@/lib/utils';
 
-function ChatList({ chats }: {chats: ChatPreviewT[]}) {
+function ChatList({ chats }: { chats: ChatPreviewT[] }) {
 
   const params = useParams<{ type: string; id: string }>();
   const [searchTerm, setsearchTerm] = useState('');

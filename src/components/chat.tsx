@@ -11,7 +11,7 @@ function Chat({ messages }: {messages: MessageT[]}) {
   useEffect(() => {
     if(chatRef.current) 
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
-  }, []);
+  }, [messages]);
 
   return (
     <div ref={chatRef} className='flex flex-col gap-2 p-4 overflow-y-auto'>
