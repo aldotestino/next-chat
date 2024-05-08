@@ -1,16 +1,23 @@
-import React from 'react';
+'use client';
 import { Separator } from './ui/separator';
 import UserAvatar from './user-avatar';
-import { User } from '@/lib/types';
 import { getUserHandle } from '@/lib/utils';
 import { Skeleton } from './ui/skeleton';
+import { getChat } from '@/server/actions';
+import { useQuery } from '@tanstack/react-query';
 
-function ChatNavbar({ user }: {user: User}) {
+function ChatNavbar({ chatId }: { chatId: string }) {
+
+  const { data } = useQuery({
+    queryKey: [`chat:${chatId}`],
+    queryFn: async () => getChat({ chatId: parseInt(chatId) }),
+  });
+
   return (
     <div>
       <div className="p-4 flex items-center gap-4">
-        <UserAvatar imageUrl={user.image || undefined} userHandle={getUserHandle(user)} />
-        <p className="text-lg font-semibold">{getUserHandle(user)}</p>
+        <UserAvatar imageUrl={data?.data?.user.image || undefined} userHandle={getUserHandle(data?.data?.user)} />
+        <p className="text-lg font-semibold">{getUserHandle(data?.data?.user)}</p>
       </div>
       <Separator />
     </div>

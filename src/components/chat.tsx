@@ -1,35 +1,38 @@
-'use client';
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query';
+import ChatNavbar, { ChatNavbarFallback } from './chat-navbar';
+import Messages, { MessagesFallback } from './messages';
+import MessageInput from './message-input';
+import { getChat } from '@/server/actions';
 
-import { MessageT } from '@/lib/types';
-import Message, { MessageFallback } from './message';
-import { useEffect, useRef } from 'react';
+async function Chat({ chatType, chatId }: {chatType: string, chatId: string}) {
 
-function Chat({ messages }: {messages: MessageT[]}) {
-
-  const chatRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if(chatRef.current) 
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
-  }, [messages]);
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  
+  const queryClient = new QueryClient();
+  queryClient.prefetchQuery({
+    queryKey: [`chat:${chatId}`],
+    queryFn: async () => getChat({ chatId: parseInt(chatId) }),
+  });
 
   return (
-    <div ref={chatRef} className='flex flex-col gap-2 p-4 overflow-y-auto'>
-      {messages.map((message, i) => (
-        <Message key={message.id} message={message} nextCreatedAt={messages[i+1]?.createdAt} nextIsMine={messages[i+1]?.isMine} />
-      ))}
-    </div>
-  );
-}
-
-export function ChatFallback() {
-  return (
-    <div className='flex flex-col gap-2 p-4 overflow-y-auto'>
-      {Array.from({ length: 5 }).map((_, i) => (
-        <MessageFallback key={i} />
-      ))}
-    </div>
+    <main className="grid grid-rows-[auto,1fr,auto] overflow-y-hidden">
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ChatNavbar chatId={chatId} />
+        <Messages chatId={chatId} />
+      </HydrationBoundary>
+      <MessageInput chatType={chatType} chatId={chatId} />
+    </main>
   );
 }
 
 export default Chat;
+
+export function ChatFallback() {
+  return (
+    <main className="grid grid-rows-[auto,1fr,auto] overflow-hidden">
+      <ChatNavbarFallback />
+      <MessagesFallback />
+      <MessageInput chatType="p" chatId="1" />
+    </main>
+  );
+}

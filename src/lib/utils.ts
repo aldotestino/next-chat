@@ -6,7 +6,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getUserHandle(user: User) {
+export function getUserHandle(user: User | undefined) {
+  if (!user) return '';
   return user.username || `${user.firstName} ${user.lastName}` || user.email.split('@')[0];
 }
 

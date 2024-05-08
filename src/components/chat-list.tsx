@@ -8,11 +8,10 @@ import { Search } from 'lucide-react';
 import { getUserHandle } from '@/lib/utils';
 import { useQuery } from '@tanstack/react-query';
 import { getChats } from '@/server/actions';
-import { Button } from './ui/button';
 
 function ChatList() {
 
-  const { data, refetch } = useQuery({
+  const { data } = useQuery({
     queryKey: ['chats'],
     queryFn: async () => getChats({}),
   });
@@ -27,15 +26,7 @@ function ChatList() {
   }, [data, searchTerm]);
 
   return (
-    <div className="h-full grid grid-rows-[auto,auto,1fr] overflow-y-hidden">
-      <div className="p-4">
-        <Button className="w-full" onClick={() => {
-          console.log('Refetching');
-          refetch().then((a) => {
-            console.log('Refetched', a);
-          });
-        }}>Refetch</Button>
-      </div>
+    <div className="h-full grid grid-rows-[auto,1fr] overflow-y-hidden">
       <div className="p-4 flex gap-4 items-center">
         <Input placeholder="Search" onChange={e => setsearchTerm(e.target.value)} className='pl-8' />
         <Search className="w-4 h-4 absolute left-6 text-muted-foreground" />
