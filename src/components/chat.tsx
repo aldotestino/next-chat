@@ -1,9 +1,20 @@
+'use client';
+
 import { MessageT } from '@/lib/types';
 import Message, { MessageFallback } from './message';
+import { useEffect, useRef } from 'react';
 
 function Chat({ messages }: {messages: MessageT[]}) {
+
+  const chatRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if(chatRef.current) 
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+  }, []);
+
   return (
-    <div className='flex flex-col gap-2 p-4 overflow-y-auto'>
+    <div ref={chatRef} className='flex flex-col gap-2 p-4 overflow-y-auto'>
       {messages.map((message, i) => (
         <Message key={message.id} message={message} nextCreatedAt={messages[i+1]?.createdAt} nextIsMine={messages[i+1]?.isMine} />
       ))}
