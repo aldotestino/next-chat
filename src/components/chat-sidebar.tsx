@@ -7,10 +7,15 @@ import { SquarePen } from 'lucide-react';
 import { Skeleton } from './ui/skeleton';
 import { getChats } from '@/server/actions';
 import CreateChatDialog from './create-chat-dialog';
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 
 async function ChatSidebar() {
-
-  const result = await getChats({});
+  
+  const queryClient = new QueryClient();
+  await queryClient.prefetchQuery({
+    queryKey: ['chats'],
+    queryFn: getChats,
+  });
   
   return (
     <aside className="w-80 border-r shadow-md grid grid-rows-[auto,1fr] overflow-y-hidden">
@@ -25,7 +30,9 @@ async function ChatSidebar() {
         </div>
         <Separator />
       </div>
-      <ChatList chats={result.data || []} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <ChatList />
+      </HydrationBoundary>
     </aside>
   );
 }

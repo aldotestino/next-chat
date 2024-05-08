@@ -5,20 +5,37 @@ import ChatPreview, { ChatPreviewFallback } from './chat-preview';
 import { Input } from './ui/input';
 import { useParams } from 'next/navigation';
 import { Search } from 'lucide-react';
-import { ChatPreviewT } from '@/lib/types';
 import { getUserHandle } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
+import { getChats } from '@/server/actions';
+import { Button } from './ui/button';
 
-function ChatList({ chats }: { chats: ChatPreviewT[] }) {
+function ChatList() {
+
+  const { data, refetch } = useQuery({
+    queryKey: ['chats'],
+    queryFn: async () => getChats({}),
+  });
 
   const params = useParams<{ type: string; id: string }>();
   const [searchTerm, setsearchTerm] = useState('');
 
   const filteredChats = useMemo(() => {
-    return chats.filter(c => getUserHandle(c.user).toLowerCase().includes(searchTerm.toLowerCase()));
-  }, [chats, searchTerm]);
+    if(!data || !data.data)
+      return [];
+    return data.data.filter(c => getUserHandle(c.user).toLowerCase().includes(searchTerm.toLowerCase()));
+  }, [data, searchTerm]);
 
   return (
-    <div className="h-full grid grid-rows-[auto,1fr] overflow-y-hidden">
+    <div className="h-full grid grid-rows-[auto,auto,1fr] overflow-y-hidden">
+      <div className="p-4">
+        <Button className="w-full" onClick={() => {
+          console.log('Refetching');
+          refetch().then((a) => {
+            console.log('Refetched', a);
+          });
+        }}>Refetch</Button>
+      </div>
       <div className="p-4 flex gap-4 items-center">
         <Input placeholder="Search" onChange={e => setsearchTerm(e.target.value)} className='pl-8' />
         <Search className="w-4 h-4 absolute left-6 text-muted-foreground" />

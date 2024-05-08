@@ -5,7 +5,7 @@ import * as z from 'zod';
 import { chat, message } from '@/db/schema';
 import { authAction } from '@/lib/safe-actions';
 import { getUserHandle } from '@/lib/utils';
-import { clerkClient } from '@clerk/nextjs/server';
+import { clerkClient, currentUser } from '@clerk/nextjs/server';
 import { desc, eq, or, and, asc } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
